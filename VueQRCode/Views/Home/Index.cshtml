@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
+@*
+    參考資訊
+    https://gruhn.github.io/vue-qrcode-reader/
+    https://www.npmjs.com/package/vue-qrcode-reader
+    https://webrtc.github.io/samples/
+    https://medium.com/parenting-tw/qrcode-scanner-with-vuejs-a69335cf9197
+*@
+
+
+<link rel="stylesheet" href="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.css" />
+<script src="~/node_modules/vue/dist/vue.min.js"></script>
+<script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.common.js"></script>
+<script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.browser.js"></script>
+
+<div id="app">
+    <p>
+        Last result: <b>{{ decodedContent }}</b>
+    </p>
+    <a v-bind:href="decodedContent" target="_blank">連結網址</a>
+    <p class="error">
+        {{ errorMessage }}
+    </p>
+
+    <qrcode-stream @@decode="onDecode" @@init="onInit"></qrcode-stream>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+
+        data() {
+            return {
+                decodedContent: '',
+                errorMessage: ''
+            }
+        },
+
+        methods: {
+            onDecode(content) {
+                this.decodedContent = content
+            },
+
+            onInit(promise) {
+                promise.then(() => {
+                    console.log('Successfully initilized! Ready for scanning now!')
+                })
+                    .catch(error => {
+                        if (error.name === 'NotAllowedError') {
+                            this.errorMessage = 'Hey! I need access to your camera'
+                        } else if (error.name === 'NotFoundError') {
+                            this.errorMessage = 'Do you even have a camera on your device?'
+                        } else if (error.name === 'NotSupportedError') {
+                            this.errorMessage = 'Seems like this page is served in non-secure context (HTTPS, localhost or file://)'
+                        } else if (error.name === 'NotReadableError') {
+                            this.errorMessage = 'Couldn\'t access your camera. Is it already in use?'
+                        } else if (error.name === 'OverconstrainedError') {
+                            this.errorMessage = 'Constraints don\'t match any installed camera. Did you asked for the front camera although there is none?'
+                        } else {
+                            this.errorMessage = 'UNKNOWN ERROR: ' + error.message
+                        }
+                    })
+            }
+        }
+    })
+
+</script>
+
+<style scoped>
+
+    .error {
+        font-weight: bold;
+        color: red;
+    }
+</style>
