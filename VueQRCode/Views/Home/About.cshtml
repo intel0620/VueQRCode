@@ -2,6 +2,115 @@
     ViewBag.Title = "About";
 }
 <h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<link rel="stylesheet" href="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.css" />
+@*<script src="~/node_modules/vue/dist/vue.min.js"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.common.js"></script>
+<script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.browser.js"></script>
+<h3>測試-QRCode</h3>
+<div id="app">
+    <button @@click="showDialog('scan-component')"> 掃碼</button>
+    <button @@click="showDialog('closescan-component')"> 隱藏</button>
+    <component :is="isA"></component>
+
+
+
+    @*<div v-if="isA === true">
+            <scan-component></scan-component>
+        </div>
+        <div v-else="isA === false">
+            <closescan-component></closescan-component>
+        </div>*@
+
+</div>
+
+<script type="text/x-template" id="scan-component">
+    <div>
+        <p>
+            Last result: <b>{{ decodedContent }}</b>
+        </p>
+        <a v-bind:href="decodedContent" target="_blank">連結網址</a>
+        <p class="error">
+            {{ errorMessage }}
+        </p>
+        <qrcode-stream @@decode="onDecode" @@init="onInit"></qrcode-stream>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="closescan-component">
+    <div>
+        <b>{{ decodedContent }}</b>
+    </div>
+</script>
+
+
+
+<script>
+    Vue.component("scan-component", {
+        data() {
+            return {
+                decodedContent: '',
+                errorMessage: ''
+            }
+        },
+
+        methods: {
+            onDecode(content) {
+                this.decodedContent = content
+            },
+
+            onInit(promise) {
+                promise.then(() => {
+                    console.log('Successfully initilized! Ready for scanning now!')
+                })
+                    .catch(error => {
+                        if (error.name === 'NotAllowedError') {
+                            this.errorMessage = 'Hey! I need access to your camera'
+                        } else if (error.name === 'NotFoundError') {
+                            this.errorMessage = 'Do you even have a camera on your device?'
+                        } else if (error.name === 'NotSupportedError') {
+                            this.errorMessage = 'Seems like this page is served in non-secure context (HTTPS, localhost or file://)'
+                        } else if (error.name === 'NotReadableError') {
+                            this.errorMessage = 'Couldn\'t access your camera. Is it already in use?'
+                        } else if (error.name === 'OverconstrainedError') {
+                            this.errorMessage = 'Constraints don\'t match any installed camera. Did you asked for the front camera although there is none?'
+                        } else {
+                            this.errorMessage = 'UNKNOWN ERROR: ' + error.message
+                        }
+                    })
+            }
+        },
+        template: '#scan-component'
+    });
+
+    Vue.component("closescan-component", {
+        data() {
+            return {
+                decodedContent: '',
+            }
+        },
+        template: '#closescan-component'
+    });
+
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            isA: 'closescan-component',
+        },
+        methods: {
+            showDialog(visible) {
+                this.isA = visible;
+            }
+        }
+    });
+</script>
+
+<style scoped>
+    .error {
+        font-weight: bold;
+        color: red;
+    }
+</style>
