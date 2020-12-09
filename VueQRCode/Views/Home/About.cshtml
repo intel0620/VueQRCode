@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "YQRC-XD";
 }
 <h2>@ViewBag.Title.</h2>
 
@@ -8,14 +8,12 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 <script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.common.js"></script>
 <script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.browser.js"></script>
-<h3>測試-QRCode</h3>
+
 <div id="app">
     <button @@click="showDialog('scan-component')"> 掃碼</button>
     <button @@click="showDialog('closescan-component')"> 隱藏</button>
     <component :is="isA"></component>
-
-
-
+    <h3>@Html.Raw(ViewData["myurl"])</h3>
     @*<div v-if="isA === true">
             <scan-component></scan-component>
         </div>
@@ -34,6 +32,15 @@
         <p class="error">
             {{ errorMessage }}
         </p>
+        @using (Html.BeginForm("About", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" id="HTTPURL" name="HTTPURL"  :value="decodedContent" >
+            <button type="submit" class="btn btn-w-m btn-warning">
+               &nbsp;&nbsp;驗&nbsp;證
+            </button>
+        }
+
+
         <qrcode-stream @@decode="onDecode" @@init="onInit"></qrcode-stream>
     </div>
 </script>
