@@ -190,6 +190,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="mp3\bb.mp3" />
     <Content Include="node_modules\babel-runtime\core-js.js" />
     <Content Include="node_modules\babel-runtime\core-js\array\concat.js" />
     <Content Include="node_modules\babel-runtime\core-js\array\copy-within.js" />
@@ -2287,7 +2288,10 @@
     <Content Include="node_modules\webrtc-adapter\test\e2e\expectations\MicrosoftEdge" />
     <Content Include="node_modules\webrtc-adapter\test\README.md" />
     <Content Include="node_modules\webrtc-adapter\test\unit\.eslintrc" />
+    <None Include="Properties\PublishProfiles\VueQRCode20200423145347 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\VueQRCode20200423145347 - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\VueQRCode20200423145347 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\VueQRCode20200423145347 - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

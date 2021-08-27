@@ -10,71 +10,232 @@
     https://medium.com/parenting-tw/qrcode-scanner-with-vuejs-a69335cf9197
 *@
 
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <link rel="stylesheet" href="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.css" />
 <script src="~/node_modules/vue/dist/vue.min.js"></script>
 <script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.common.js"></script>
 <script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.browser.js"></script>
-<h3>測試-QRCode</h3>
+
+<h3>QRCode</h3>
 <div id="app">
-    <p>
-        Last result: <b>{{ decodedContent }}</b>
-    </p>
-    <a v-bind:href="decodedContent" target="_blank">連結網址</a>
-    <p class="error">
-        {{ errorMessage }}
-    </p>
+    @*<p>
+            Last result: <br/>
+            {{ decodedContent }}
+        </p>*@
 
-    <qrcode-stream @@decode="onDecode" @@init="onInit"></qrcode-stream>
 
-   
+    @*<a v-bind:href="decodedContent" target="_blank">連結網址</a>*@
+    @*<p class="error">
+            {{ errorMessage }}
+        </p>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="error" v-if="noFrontCamera">
+                    偵測不到後置鏡頭
+                </p>
+
+                <p class="error" v-if="noRearCamera">
+                    偵測不到前置鏡頭
+                </p>
+                <qrcode-stream :camera="camera" @@decode="onDecode" @@init="onInit">
+                    <button @@click="switchCamera">
+                        <i class="fa fa-camera" aria-hidden="true"></i> 變更鏡頭
+                    </button>
+                </qrcode-stream>
+
+
+                @*<qrcode-stream @@decode="onDecode" @@init="onInit">
+                        <button @@click="switchCamera">
+                            變更鏡頭
+                        </button>
+
+                    </qrcode-stream>*@
+
+                @*<qrcode-stream :camera="camera" @@init="onInit">
+                        <button @@click="switchCamera">
+                           變更鏡頭
+                        </button>
+                    </qrcode-stream>*@
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <span class="badge badge-pill badge-primary">目前掃描共 <span class="badge badge-light">{{count}}</span>筆</span>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value=""  @@click="closeBB" id="linksNewWindow">
+                            <label class="form-check-label" for="linksNewWindow">
+                                關閉掃描聲音
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                @using (Html.BeginForm("Index", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <button type="submit" class="btn btn-primary btn-sm btn-block">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;存&nbsp;檔
+                    </button>
+                    <input type="hidden" id="HTTPURL" name="HTTPURL" :value="decodedContent">
+
+                    <textarea class="form-control" style="min-width: 100%; min-height:400px" readonly="readonly" id="HTTPURL">{{ decodedContent }}</textarea>
+                }
+            </div>
+
+        </div>
+    </div>
 
 </div>
-    <script>
-        new Vue({
-            el: '#app',
 
-            data() {
-                return {
-                    decodedContent: '',
-                    errorMessage: ''
+@section Scripts{
+    @Html.Raw(@TempData["alert"])
+}
+
+<script type="text/javascript">
+    function setCookie(c_name, value, expiredays) {
+        var exdate = new Date()
+        exdate.setDate(exdate.getDate() + expiredays)
+        document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate)
+    }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=")
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1
+                c_end = document.cookie.indexOf(";", c_start)
+                if (c_end == -1) c_end = document.cookie.length
+                return unescape(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return null
+    }
+    onload = function () {
+        document.getElementById('linksNewWindow').checked = getCookie('linksNewWindow') == 1 ? true : false;
+    }
+    function set_check() {
+        setCookie('linksNewWindow', document.getElementById('linksNewWindow').checked ? 1 : 0, 100);
+    }
+</script>
+
+
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                decodedContent: '',
+                errorMessage: '',
+                count: 0,
+                camera: 'front',
+
+                noRearCamera: false,
+                noFrontCamera: false,
+                bbmp3: false
+            }
+        },
+        methods: {
+            closeBB() {
+                setCookie('linksNewWindow', document.getElementById('linksNewWindow').checked ? 1 : 0, 100);
+                /*this.bbmp3 == true ? this.bbmp3 = false : this.bbmp3 = true;*/
+                if (this.bbmp3) {
+                    this.bbmp3 = true
+
+                } else {
+                    this.bbmp3 = false
+                }
+                document.getElementById('linksNewWindow').checked = getCookie('linksNewWindow') == 1 ? true : false;
+               
+            },
+            switchCamera() {
+                switch (this.camera) {
+                    case 'front':
+                        this.camera = 'rear',
+                            this.noRearCamera = false,
+                            this.noFrontCamera = false
+                        break
+                    case 'rear':
+                        this.camera = 'front',
+                            this.noRearCamera = false,
+                            this.noFrontCamera = false
+                        break
                 }
             },
+            onDecode(content) {
+                if (content.includes('http')) {
+                    var bbmp = getCookie('linksNewWindow') == 1 ? true : false;
+                    
+                    if (this.count < 1) {
+                        // this.count++;
+                        this.decodedContent = content;
+                    } else {
+                        this.decodedContent = content + '\r\n' + this.decodedContent;
+                    }
 
-            methods: {
-                onDecode(content) {
-                    this.decodedContent = content
-                },
-               
-                onInit(promise) {
-                    promise.then(() => {
-                        console.log('Successfully initilized! Ready for scanning now!')
-                    })
-                        .catch(error => {
-                            if (error.name === 'NotAllowedError') {
-                                this.errorMessage = 'Hey! I need access to your camera'
-                            } else if (error.name === 'NotFoundError') {
-                                this.errorMessage = 'Do you even have a camera on your device?'
-                            } else if (error.name === 'NotSupportedError') {
-                                this.errorMessage = 'Seems like this page is served in non-secure context (HTTPS, localhost or file://)'
-                            } else if (error.name === 'NotReadableError') {
-                                this.errorMessage = 'Couldn\'t access your camera. Is it already in use?'
-                            } else if (error.name === 'OverconstrainedError') {
-                                this.errorMessage = 'Constraints don\'t match any installed camera. Did you asked for the front camera although there is none?'
-                            } else {
-                                this.errorMessage = 'UNKNOWN ERROR: ' + error.message
-                            }
-                        })
+                    if (!bbmp) {
+                        var audio = new Audio('/mp3/bb.mp3');
+                        audio.play();
+                    }
+                    this.count++;
+                }
+            },
+            async onInit(promise) {
+                try {
+                    await promise
+                } catch (error) {
+                    const triedFrontCamera = this.camera === 'front'
+                    const triedRearCamera = this.camera === 'rear'
+
+                    const cameraMissingError = error.name === 'OverconstrainedError'
+
+                    if (triedRearCamera && cameraMissingError) {
+                        this.noRearCamera = true
+
+                    }
+
+                    if (triedFrontCamera && cameraMissingError) {
+                        this.noFrontCamera = true
+
+                    }
+
+                    //   console.error(error)
                 }
             }
-        })
+            //onInit(promise) {
 
-    </script>
-
-    <style scoped>
-
-        .error {
-            font-weight: bold;
-            color: red;
+            //    promise.then(() => {
+            //        console.log('Successfully initilized! Ready for scanning now!')
+            //    })
+            //        .catch(error => {
+            //            if (error.name === 'NotAllowedError') {
+            //                this.errorMessage = 'Hey! I need access to your camera'
+            //            } else if (error.name === 'NotFoundError') {
+            //                this.errorMessage = 'Do you even have a camera on your device?'
+            //            } else if (error.name === 'NotSupportedError') {
+            //                this.errorMessage = 'Seems like this page is served in non-secure context (HTTPS, localhost or file://)'
+            //            } else if (error.name === 'NotReadableError') {
+            //                this.errorMessage = 'Couldn\'t access your camera. Is it already in use?'
+            //            } else if (error.name === 'OverconstrainedError') {
+            //                this.errorMessage = 'Constraints don\'t match any installed camera. Did you asked for the front camera although there is none?'
+            //            } else {
+            //                this.errorMessage = 'UNKNOWN ERROR: ' + error.message
+            //            }
+            //        })
+            //}
         }
-    </style>
+    })
+
+</script>
+
+<style scoped>
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+

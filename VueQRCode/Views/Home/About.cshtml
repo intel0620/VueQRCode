@@ -35,8 +35,9 @@
         @using (Html.BeginForm("About", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             <input type="hidden" id="HTTPURL" name="HTTPURL"  :value="decodedContent" >
+           
             <button type="submit" class="btn btn-w-m btn-warning">
-               &nbsp;&nbsp;驗&nbsp;證
+                &nbsp;&nbsp;驗&nbsp;證
             </button>
         }
 
