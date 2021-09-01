@@ -15,11 +15,11 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cppbuilder/VueQRCode.git"
+    "url": "git+https://github.com/intel0620/VueQRCode.git"
   },
   "bugs": {
-    "url": "https://github.com/cppbuilder/VueQRCode/issues"
+    "url": "https://github.com/intel0620/VueQRCode/issues"
   },
-  "homepage": "https://github.com/cppbuilder/VueQRCode#readme",
+  "homepage": "https://github.com/intel0620/VueQRCode#readme",
   "description": ""
 }

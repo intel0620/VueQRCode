@@ -12,22 +12,39 @@ namespace VueQRCode.Controllers
     {
         public ActionResult Index()
         {
-
+            ViewData["sc"] =  TempData["sc"] != null ? TempData["sc"] : "front";
+            ViewData["dfcamera"] = TempData["dfcamera"] != null ? TempData["dfcamera"] : "scan-component";
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(string HTTPURL)
+        public ActionResult Index(string HTTPURL ,string sc, string dfcamera)
         {
             string[] stringSeparators = new string[] { "\r\n" };
             string[] lines = HTTPURL.Split(stringSeparators, StringSplitOptions.None);
+            int count = 0;
            
-            string cc = @" ""共" + lines.Count() + @"筆資料""";
-            //foreach (string s in lines)
-            //{
-            //    Console.WriteLine(s); 
-            //}
-            TempData["alert"] = @"<script>Swal.fire('更新成功!', " + cc +  @", 'success')</script>";
+            foreach (string s in lines)
+            {
+               if(s.Trim()!= "")
+                {
+                    count++;
+                }
+            }
+            string cc = @" ""共更新 " + count + @"筆資料""";
+
+
+            if (count > 1)
+            {
+                TempData["alert"] = @"<script>Swal.fire('更新成功!', " + cc + @", 'success')</script>";
+            }
+            else { 
+             TempData["alert"] = @"<script>Swal.fire('沒有資料!', " + cc + @", 'info')</script>";
+            }
+            TempData["dfcamera"] = dfcamera;
+            TempData["sc"] = sc;
+            ViewData["dfcamera"] = dfcamera;
+            ViewData["sc"] = sc;
             return View();
         }
 

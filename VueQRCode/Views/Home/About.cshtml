@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.css" />
 @*<script src="~/node_modules/vue/dist/vue.min.js"></script>*@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-<script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.common.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-qrcode-reader@3.0.3/dist/VueQrcodeReader.common.min.js"></script>
 <script src="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.browser.js"></script>
 
 <div id="app">
@@ -34,15 +34,19 @@
         </p>
         @using (Html.BeginForm("About", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <input type="hidden" id="HTTPURL" name="HTTPURL"  :value="decodedContent" >
-           
+            <input type="hidden" id="HTTPURL" name="HTTPURL" :value="decodedContent">
+
             <button type="submit" class="btn btn-w-m btn-warning">
                 &nbsp;&nbsp;驗&nbsp;證
             </button>
         }
 
-
-        <qrcode-stream @@decode="onDecode" @@init="onInit"></qrcode-stream>
+        <div class="stream">
+            <qr-stream @@decode="onDecode" class="mb">
+                <div style="color: red;" class="frame"></div>
+            </qr-stream>
+        </div>
+        @*<qrcode-stream @@decode="onDecode" @@init="onInit"></qrcode-stream>*@
     </div>
 </script>
 
