@@ -15,14 +15,25 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" id="theme-styles">
 
 </head>
-<body style="background-color:#dfdfdf;">
-   <hr />
+<body style="background-color:#dfdfdf;" class="">
+    <nav class="navbar  " style="background-color: #f0f0f0; ">
+        <img src="~/Images/logo.png" class="img-fluid d-inline-block align-top " alt="Responsive image">
+    </nav>
+    <br />
     <div class="container">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year</p>
-        </footer>
+        <div class="footer" style="font-size: x-small">
+            <div class="float-right">
+
+            </div>
+            <div>
+                <strong>
+                    Copyright
+                </strong> &copy; @DateTime.Now.Year YUEN FOONG PAPER CO.,LTD. 永豐紙業 All rights reserved.
+
+            </div>
+        </div>
     </div>
 
     @*@Scripts.Render("~/bundles/jquery")

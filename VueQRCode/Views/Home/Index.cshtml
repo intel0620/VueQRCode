@@ -175,8 +175,8 @@
                     this.count = 0;
                     this.decodedContent = '';
                 }
-                //this.decodedContent = content
-                if (content.includes('http')) {
+                //this.decodedContent = content   //content.includes('http')
+                if (content.length >1) {
                     var bbmp = getCookie('linksNewWindow') == 1 ? true : false;
 
                     if (this.count < 1) {

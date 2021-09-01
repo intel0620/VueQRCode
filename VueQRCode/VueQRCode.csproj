@@ -190,6 +190,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\1200px-Uni-President_Taiwan_logo.svg.png" />
+    <Content Include="Images\711logo.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="mp3\bb.mp3" />
     <Content Include="node_modules\babel-runtime\core-js.js" />
     <Content Include="node_modules\babel-runtime\core-js\array\concat.js" />
