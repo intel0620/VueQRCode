@@ -20,7 +20,7 @@
 <div id="app">
     <div class="row">
         <div class="col-lg-6">
-            <div class="row container">
+            <div class="row">
                 <div class="col-4">
                     <button @@click="showDialog('scan-component')" class="btn btn-primary btn-sm btn-block"><i class="fa fa-camera" aria-hidden="true"></i> 開啟鏡頭</button>
                 </div>
@@ -43,7 +43,7 @@
         <div class="col-lg-6">
             @using (Html.BeginForm("Index", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
-                <div class="row container">
+                <div class="row">
                     <div class="col-4">
                         <button type="submit" class="btn btn-primary btn-sm btn-block">
                             <i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;存&nbsp;檔
@@ -60,7 +60,7 @@
                     </div>
                     <div class="col-4">
                         <div @@click="clearData" class="btn btn-danger btn-sm btn-block">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>清除資料
+                            <i class="fa fa-trash-o" aria-hidden="true"></i> 清除資料
                         </div>
                         @*<div @@click="clearData" class="btn btn-danger btn-sm btn-block">
             <i class="fa fa-trash-o" aria-hidden="true"></i>清除資料
