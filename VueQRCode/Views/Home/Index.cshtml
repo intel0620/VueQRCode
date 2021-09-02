@@ -34,7 +34,7 @@
                             靜音掃描
                         </label>
                       
-                        <audio style="display:none;" src="https://vueqrcode20200423145347.azurewebsites.net/mp3/bb.mp3" id="audio" autoplay preload="metadata"></audio>
+                        <audio style="display:none;" src="https://vueqrcode20200423145347.azurewebsites.net/mp3/bb.mp3" id="audio"  preload="auto"></audio>
 
 </div>
                 </div>
@@ -194,16 +194,16 @@
 
                     if (!bbmp) {
                        
-                        function forceSafariPlayAudio() {
-                            audioEl.load(); // iOS 9   還需要額外的 load 一下, 否則直接 play 無效
-                            audioEl.play(); // iOS 7/8 僅需要 play 一下
-                        };
-                        var audioEl = document.getElementsByTagName('audio')[0];
+                        //function forceSafariPlayAudio() {
+                        //    audioEl.load(); // iOS 9   還需要額外的 load 一下, 否則直接 play 無效
+                        //    audioEl.play(); // iOS 7/8 僅需要 play 一下
+                        //};
+                        //var audioEl = document.getElementsByTagName('audio')[0];
 
-                        // 由於 iOS Safari 限制不允許 audio autoplay, 必須用戶主動交互(例如 click)後才能播放 audio,
-                        // 因此我們通過一個用戶交互事件來主動 play 一下 audio.
-                        window.addEventListener('touchstart', forceSafariPlayAudio, false);
-                        audioEl.src = 'https://vueqrcode20200423145347.azurewebsites.net/mp3/bb.mp3';
+                        //// 由於 iOS Safari 限制不允許 audio autoplay, 必須用戶主動交互(例如 click)後才能播放 audio,
+                        //// 因此我們通過一個用戶交互事件來主動 play 一下 audio.
+                        //window.addEventListener('touchstart', forceSafariPlayAudio, false);
+                        //audioEl.src = 'https://vueqrcode20200423145347.azurewebsites.net/mp3/bb.mp3';
 
 
 
@@ -211,8 +211,9 @@
                         //    audioPlayer.load();
                         //    audioPlayer.play();
                   
-                        //var audio = document.getElementsByTagName('audio')[0]; // 播放 audio.play(); // 暫停 audio.pause();
-                        //audio.play();
+                        var audio = document.getElementsByTagName('audio')[0]; // 播放 audio.play(); // 暫停 audio.pause();
+                        audio.load();
+                        audio.play();
                         
                     }
 
