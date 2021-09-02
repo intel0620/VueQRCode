@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<script src="http://code.jquery.com/jquery-1.5.js"></script>
+<textarea id="text" rows=20 cols=20 onkeypress="check(this);" placeholder="最多10筆" autofocus></textarea>
+
+
+
+<script>
+        function check(obj){
+        var num = document.getElementById("text").value.split('\n').length;
+            if (num > 10) {
+                $('#text').attr('disabled', true);
+                alert('已達到10筆,請先存檔');
+                return;
+            } else {
+                
+            }
+    }
+    </script>
+
+
+@*<script>
+    var t = $(this).val().match(/\r?\n|\r/g).length;*@
+
+
+

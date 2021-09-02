@@ -12,8 +12,37 @@ namespace VueQRCode.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["sc"] =  TempData["sc"] != null ? TempData["sc"] : "front";
-            ViewData["dfcamera"] = TempData["dfcamera"] != null ? TempData["dfcamera"] : "scan-component";
+            string dfcamera = string.Empty;
+            string sc = string.Empty;
+            if (ViewData["dfcamera"] == null)
+            {
+                HttpCookie cookie = new HttpCookie("dfcamera", "closescan-component");
+                cookie.Expires = DateTime.UtcNow.AddHours(8).AddMilliseconds(5);
+                HttpContext.Response.Cookies.Add(cookie);
+                dfcamera = Request.Cookies["dfcamera"].Value.ToString();
+            }
+            else
+            {
+                dfcamera = Request.Cookies["dfcamera"].Value.ToString();
+            }
+
+
+            if (ViewData["sc"] == null)
+            {
+                HttpCookie cookiesc = new HttpCookie("sc", "rear");
+                cookiesc.Expires = DateTime.UtcNow.AddHours(8).AddMilliseconds(5);
+                HttpContext.Response.Cookies.Add(cookiesc);
+                sc = Request.Cookies["sc"].Value.ToString();
+            }
+            else
+            {
+                sc = Request.Cookies["sc"].Value.ToString();
+            }
+
+            ViewData["dfcamera"] = dfcamera;
+            ViewData["sc"] = sc;
+           // ViewData["sc"] =  TempData["sc"] != null ? TempData["sc"] : "rear"; //front rear
+           // ViewData["dfcamera"] = TempData["dfcamera"] != null ? TempData["dfcamera"] : "closescan-component";
             return View();
         }
 
@@ -41,9 +70,16 @@ namespace VueQRCode.Controllers
             else { 
              TempData["alert"] = @"<script>Swal.fire('沒有資料!', " + cc + @", 'info')</script>";
             }
-            TempData["dfcamera"] = dfcamera;
-            TempData["sc"] = sc;
+           
+            HttpCookie cookie = new HttpCookie("dfcamera", dfcamera);
+            cookie.Expires = DateTime.UtcNow.AddHours(8).AddMilliseconds(5);
+            HttpContext.Response.Cookies.Add(cookie);
             ViewData["dfcamera"] = dfcamera;
+           
+            
+            HttpCookie cookiesc = new HttpCookie("sc", sc);
+            cookiesc.Expires = DateTime.UtcNow.AddHours(8).AddMilliseconds(5);
+            HttpContext.Response.Cookies.Add(cookiesc);
             ViewData["sc"] = sc;
             return View();
         }

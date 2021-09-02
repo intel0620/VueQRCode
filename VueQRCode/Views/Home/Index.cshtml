@@ -33,11 +33,14 @@
                         <label class="form-check-label" for="linksNewWindow">
                             靜音掃描
                         </label>
-                    </div>
+                      
+                        <audio style="display:none;" src="https://vueqrcode20200423145347.azurewebsites.net/mp3/bb.mp3" id="audio" autoplay preload="metadata"></audio>
+
+</div>
                 </div>
             </div>
             <hr />
-                <component :is="isA" @@count="parentCount" @@decoded_content="parentDecodedContent" ></component>
+                <component :is="isA" @@count="parentCount" @@decoded_content="parentDecodedContent"  @@camera="parentCamera"></component>
             <br />
         </div>
         <div class="col-lg-6">
@@ -148,7 +151,7 @@
 
                 noRearCamera: false,
                 noFrontCamera: false,
-                bbmp3: false,
+                bbmp3: true,
             }
         },
         methods: {
@@ -156,16 +159,20 @@
                 // alert(document.getElementById('sc').value);
                 switch (this.camera) {
                     case 'front':
-                        setCookie('sc', 'rear', 100);
-                        this.camera = 'rear',
+                        //setCookie('sc', 'rear', 100);
+                            this.camera = 'rear',
                             this.noRearCamera = false,
                             this.noFrontCamera = false
+                            this.$emit('camera', this.camera);
                         break
                     case 'rear':
-                        setCookie('sc', 'front', 100);
+                        //setCookie('sc', 'front', 100);
+
                         this.camera = 'front',
                             this.noRearCamera = false,
-                            this.noFrontCamera = false
+                            this.noFrontCamera = false,
+                            this.$emit('camera', this.camera);
+                        
                         break
                 }
             },
@@ -186,8 +193,27 @@
                     }
 
                     if (!bbmp) {
-                        var audio = new Audio('/mp3/bb.mp3');
-                        audio.play();
+                       
+                        function forceSafariPlayAudio() {
+                            audioEl.load(); // iOS 9   還需要額外的 load 一下, 否則直接 play 無效
+                            audioEl.play(); // iOS 7/8 僅需要 play 一下
+                        };
+                        var audioEl = document.getElementsByTagName('audio')[0];
+
+                        // 由於 iOS Safari 限制不允許 audio autoplay, 必須用戶主動交互(例如 click)後才能播放 audio,
+                        // 因此我們通過一個用戶交互事件來主動 play 一下 audio.
+                        window.addEventListener('touchstart', forceSafariPlayAudio, false);
+                        audioEl.src = 'https://vueqrcode20200423145347.azurewebsites.net/mp3/bb.mp3';
+
+
+
+                        //var audioPlayer = document.getElementsByTagName('audio')[0];
+                        //    audioPlayer.load();
+                        //    audioPlayer.play();
+                  
+                        //var audio = document.getElementsByTagName('audio')[0]; // 播放 audio.play(); // 暫停 audio.pause();
+                        //audio.play();
+                        
                     }
 
                     this.count++;
@@ -238,13 +264,16 @@
                 decodedContent: '',
                 errorMessage: '',
                 count: 0,
-                camera:'@ViewData["sc"]',
+                camera: '@ViewData["sc"]',
                 isA: '@ViewData["dfcamera"]'
             }
         },
         methods: {
             parentDecodedContent(decodedContent) {
                 this.decodedContent = decodedContent;
+            },
+            parentCamera(camera) {
+                this.camera = camera;
             },
             clearData() {
                 this.decodedContent = '';
@@ -283,5 +312,5 @@
     }
 </style>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
