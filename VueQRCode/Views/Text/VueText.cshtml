@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "VueText";
+}
+<script src="https://unpkg.com/vue@next"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>*@
+@*<script src="http://code.jquery.com/jquery-1.5.js"></script>*@
+
+<div id="app">
+    <div>
+        <input type="text" ref="test1" v-on:keyup.enter="checktxt" id="iptext" maxlength="12">
+
+    </div>
+
+    <textarea id="tt" type="text" rows=10 cols=20>{{areatxt}}</textarea>
+    {{list}}
+
+   @*<button @@click="checkarea">Buttoncheckarea</button>*@
+
+    <div>
+        <button @@click="run">Button</button>
+    </div>
+</div>
+
+
+<script>
+    const App = {
+        data() {
+            return {
+                data: '',
+                areatxt: '',
+                rr: '',
+                list: '',
+                vlength:0
+            }
+        },
+        methods: {
+            run() {
+                this.$refs.test1.focus();
+            },
+            checkarea() {
+                const arrt = document.getElementById("tt").value.split('\n');
+                var result = {};
+                var repeat = {};
+                arrt.forEach(item => {
+                    result.hasOwnProperty(item) ? repeat[item]++ : result[item]++;
+                })
+                // console.log(result); // {1, 2, "a", 3, "b"}
+                console.log(Object.keys(repeat)); // {1, "a"}
+                var ss = Object.keys(repeat).toString();
+                Swal.fire('重複序號', ss, 'warning');
+                console.log(ss);
+
+                //const rep = arrt.filter(function (item, index, arr) {
+                //    //console.log(item);
+                //    //console.log(arr.indexOf(item) !== index);
+                //    if (arr.indexOf(item) !== index) {
+                //        console.log(item + '有重複');
+                //        alert(item + '有重複');
+                //    }
+                //});
+
+            },
+            checktxt() {
+                var v = document.getElementById("iptext").value.toUpperCase().replace(/\s*/g, "");
+                this.vlength = document.getElementById("iptext").value.toUpperCase().replace(/\s*/g, "").length;
+
+                //const arrt = document.getElementById("tt").value.split('\n');
+              
+                //const rep = arrt.filter(function (item, index, arr) {
+                //    console.log(arr.indexOf(item) !== index);
+                //});
+
+
+               
+
+
+                if (this.vlength != 1) {
+                    Swal.fire('序號不正確', v, 'warning');
+                  
+                }
+
+                if (this.vlength === 12)
+                {
+                    Swal.fire('長度正確', v, 'warning');
+
+                    if (this.areatxt.includes(v))
+                    {
+                        Swal.fire('重複', '與輸入的筆數有重複', 'warning')
+                        /*document.getElementById("iptext").value = '';*/
+                       /* this.$refs.test1.focus(); */
+                        
+                    }
+                    else 
+                    {
+                        /*console.log(v + '沒重複')*/
+                        this.areatxt = v + '\r\n' + this.areatxt;
+                        document.getElementById("iptext").value = '';
+                       /* this.$refs.test1.focus(); */
+                    }
+                }
+
+                var num = document.getElementById("tt").value.split('\n').length;
+                if (num >= 5) {
+                   /* $('#tt').attr('disabled', true);*/
+                    $('#iptext').attr('disabled', true);
+                    Swal.fire('筆數限制', '已達到3筆,請先存檔', 'info')
+                    /* alert('已達到10筆,請先存檔');*/
+                    return;
+                } else {
+
+                }
+
+            }
+        }
+    };
+    Vue.createApp(App).mount('#app');
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

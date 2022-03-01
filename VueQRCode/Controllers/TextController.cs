@@ -13,5 +13,10 @@ namespace VueQRCode.Controllers
         {
             return View();
         }
+
+        public ActionResult VueText()
+        {
+            return View();
+        }
     }
 }

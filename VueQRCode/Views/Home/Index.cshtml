@@ -9,7 +9,6 @@
     https://webrtc.github.io/samples/
     https://medium.com/parenting-tw/qrcode-scanner-with-vuejs-a69335cf9197
 *@
-<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <link rel="stylesheet" href="~/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.css" />
 <script src="~/node_modules/vue/dist/vue.min.js"></script>
@@ -121,7 +120,7 @@
             偵測不到前置鏡頭,請嘗試切換鏡頭
         </p>
         @*<qrcode-stream :camera="camera" @@decode="onDecode" @@init="onInit"></qrcode-stream>*@
-        <qrcode-stream :camera="camera" @@decode="onDecode" @@init="onInit">
+        <qrcode-stream  @@decode="onDecode" @@init="onInit">
         <button @@click="switchCamera">
             <i class="fa fa-refresh" aria-hidden="true"></i> 切換鏡頭
             </button>
